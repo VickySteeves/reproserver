@@ -66,3 +66,16 @@ services:
       POSTGRES_PASSWORD: ${ADMIN_PASSWORD}
     ports:
       - 5432:5432
+  prometheus:
+    image: prom/prometheus
+    ports:
+      - 9090:9090
+    volumes:
+      - prometheus:/prometheus
+      - ./docker/prometheus.yml:/etc/prometheus/prometheus.yml
+  grafana:
+    image: grafana/grafana
+    ports:
+      - 3000:3000
+volumes:
+  prometheus:
