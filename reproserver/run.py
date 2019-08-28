@@ -48,6 +48,14 @@ class Runner(object):
         )
 
     def run_sync(self, run_id):
+        raise NotImplementedError
+
+
+class DockerRunner(Runner):
+    def run_sync(self, run_id):
+        self._docker_run(run_id)
+
+    def _docker_run(self, run_id):
         """Run a built experiment.
 
         Lookup a run in the database, get the input files from S3, then do the
@@ -268,3 +276,16 @@ class Runner(object):
             subprocess.call(['docker', 'rmi', '--', fq_image_name])
             # Remove build directory
             shutil.rmtree(directory)
+
+
+class K8sRunner(DockerRunner):
+    def __init__(self, *, namespace, **kwargs):
+        super(K8sRunner, self).__init__(**kwargs)
+        self.namespace = namespace
+
+    @classmethod
+    def _run_in_pod(cls, namespace, run_id):
+        TODO
+
+    def run_sync(self, run_id):
+        TODO
